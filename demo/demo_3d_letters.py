@@ -13,7 +13,7 @@ write_to_disk = True
 
 # Try to run on GPU
 ti.init(arch=ti.cuda,
-        kernel_profiler=True,
+        kernel_profiler=False,
         use_unified_memory=False,
         device_memory_fraction=0.7)
 
@@ -97,12 +97,12 @@ for frame in range(15000):
                      velocity=(0, -2, 0),
                      translation=((i + 0.5) * 0.25, 0, (2 - j) * 0.1))
 
-    mpm.step(2e-3, print_stat=True)
+    mpm.step(2e-3, print_stat=False)
     if with_gui and frame % 3 == 0:
         particles = mpm.particle_info()
         visualize(particles)
 
-    if write_to_disk:
+    if frame >= 500 and write_to_disk:
         mpm.write_particles(f'{output_dir}/{frame:05d}.npz')
     print(f'Frame total time {time.time() - t:.3f}')
     print(f'Total running time {time.time() - start_t:.3f}')
